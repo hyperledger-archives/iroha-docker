@@ -16,7 +16,7 @@ LABEL RUN="docker run -it --name iroha soramitsu/iroha /bin/bash"
 USER root
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-ENV IROHA_HOME=/opt/iroha
+ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
 RUN git clone https://github.com/hyperledger/iroha.git
