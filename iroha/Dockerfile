@@ -56,4 +56,4 @@ WORKDIR /opt/iroha
 
 COPY ./start_iroha.sh /start_iroha.sh
 
-CMD ["/bin/bash"]
+CMD ["/bin/bash","/start_iroha.sh"]
