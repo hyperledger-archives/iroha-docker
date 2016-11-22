@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-# iroha - IROHA container
+# iroha - IROHA container (IROHA repository development)
 #
 # build : docker build --shm-size 1g -t soramitsu/iroha .
 #
@@ -51,9 +51,25 @@ WORKDIR /opt/iroha/build
 RUN cmake ..
 RUN make
 
+RUN mkdir /usr/local/iroha
+RUN rsync -av /opt/iroha/build/bin /usr/local/iroha
+RUN rsync -av /opt/iroha/config    /usr/local/iroha
+RUN rsync -av /opt/iroha/build/lib /usr/local/iroha
+RUN rsync -av /opt/iroha/build/my_test_bin /usr/local/iroha
+RUN rsync -av /opt/iroha/core/vendor/Aeron/aeron-driver/build/libs /usr/local/iroha
+
+COPY ./start_iroha.sh /usr/local/iroha/start_iroha.sh
+
+RUN rm -fr /opt/iroha
+RUN apt remove -y --purge git g++-5 gcc-5 make curl
+RUN apt remove -y --purge libhdf5-serial-dev libleveldb-dev libsnappy-dev liblmdb-dev
+RUN apt remove -y --purge libssl-dev snappy unzip xsltproc zlib1g-dev
+RUN rm -fr /root/.sdkman
+
+RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /home/iroha/.bashrc
+RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /root/.bashrc
+
 ## USER iroha
-WORKDIR /opt/iroha
+WORKDIR /usr/local/iroha
 
-COPY ./start_iroha.sh /start_iroha.sh
-
-CMD ["/bin/bash","/start_iroha.sh"]
+CMD ["/bin/bash","/usr/local/iroha/start_iroha.sh"]
