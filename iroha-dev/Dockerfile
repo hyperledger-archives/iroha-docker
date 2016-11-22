@@ -17,42 +17,32 @@ USER root
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME=/opt/iroha
 
-RUN groupadd -g 168 iroha
-RUN useradd -u 168 -c "IROHA Administrator" -s /bin/bash -m -p $(perl -e "print(crypt('passw0rd', 'sa'));") -g iroha iroha
+RUN groupadd -g 168 iroha && \
+    useradd -u 168 -c "IROHA Administrator" -s /bin/bash -m -p $(perl -e "print(crypt('passw0rd', 'sa'));") -g iroha iroha && \
+    usermod -G adm,sudo iroha && \
+    echo "export IROHA_HOME=${IROHA_HOME}" >>/home/iroha/.bashrc && \
+    echo "export JAVA_HOME=${JAVA_HOME}" >>/home/iroha/.bashrc && \
+    echo "export IROHA_HOME=${IROHA_HOME}" >>/root/.bashrc && \
+    echo "export JAVA_HOME=${JAVA_HOME}" >>/root/.bashrc
 
-RUN usermod -G adm,sudo iroha
+RUN apt update && apt -y upgrade
 
-RUN echo "export IROHA_HOME=${IROHA_HOME}" >>/home/iroha/.bashrc
-RUN echo "export JAVA_HOME=${JAVA_HOME}" >>/home/iroha/.bashrc
+RUN apt -y install software-properties-common python-software-properties && \
+    add-apt-repository -y ppa:ubuntu-toolchain-r/test
 
-RUN echo "export IROHA_HOME=${IROHA_HOME}" >>/root/.bashrc
-RUN echo "export JAVA_HOME=${JAVA_HOME}" >>/root/.bashrc
+RUN apt -y install curl git make g++-5 gcc-5 default-jdk && \
+    apt -y install libhdf5-serial-dev libleveldb-dev libsnappy-dev && \
+    apt -y install liblmdb-dev libssl-dev snappy unzip xsltproc zlib1g-dev && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 20 && \
+    update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-5 20 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 20 && \
+    update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-5 20
 
-RUN apt update
-RUN apt -y upgrade
+RUN curl -sSL https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /opt && \
+    ln -s /opt/cmake*/bin/c* /usr/local/bin
 
-RUN apt -y install software-properties-common python-software-properties
-RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
-
-RUN apt -y install git
-RUN apt -y install g++-5 gcc-5
-RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 20
-RUN update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-5 20
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 20
-RUN update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-5 20
-RUN apt -y install make
-
-RUN apt -y install curl
-RUN curl -sSL https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /opt
-RUN ln -s /opt/cmake*/bin/c* /usr/local/bin
-
-RUN apt -y install default-jdk
-RUN apt -y install libhdf5-serial-dev libleveldb-dev libsnappy-dev liblmdb-dev
-RUN apt -y install libssl-dev snappy unzip xsltproc zlib1g-dev
-
-WORKDIR /root
 RUN ln -f -s /bin/bash /bin/sh
-RUN curl -s https://get.sdkman.io | bash
-RUN source "/root/.sdkman/bin/sdkman-init.sh" && (echo 'y' | sdk install gradle 3.0)
+RUN curl -s https://get.sdkman.io | bash && \
+    source "/root/.sdkman/bin/sdkman-init.sh" && (echo 'y' | sdk install gradle 3.0)
 
 CMD ["/bin/bash"]
