@@ -11,7 +11,7 @@ FROM ubuntu
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
 LABEL BUILD="docker build -t soramitsu/iroha-rel ."
-LABEL RUN="docker run -it --name iroha --sm-size 512m soramitsu/iroha-rel /bin/bash"
+LABEL RUN="docker run -it --name iroha --shm-size 512m soramitsu/iroha-rel /bin/bash"
 
 USER root
 
