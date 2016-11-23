@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------
 # iroha - IROHA container (IROHA repository development)
 #
-# build : docker build --shm-size 1g -t soramitsu/iroha .
+# build : docker build -t soramitsu/iroha .
 #
 # Copyright (c) 2016 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
@@ -10,8 +10,8 @@ FROM soramitsu/iroha-dev
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build --shm-size 1g -t soramitsu/iroha ."
-LABEL RUN="docker run -it --name iroha soramitsu/iroha /bin/bash"
+LABEL BUILD="docker build -t soramitsu/iroha ."
+LABEL RUN="docker run -it --shm-size 512m --name iroha soramitsu/iroha /bin/bash"
 
 USER root
 
