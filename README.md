@@ -150,4 +150,7 @@ Last instance will be need _public_ argument for `sumeragi_test` command.
 
 Have fun!
 
+## Authors
+[Takeshi Yonezu](https://github.com/tkyonezu)
+
 Copyright (c) 2016 Soramitsu Co., Ltd.
