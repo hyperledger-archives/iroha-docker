@@ -21,7 +21,6 @@ ENV IROHA_HOME /opt/iroha
 WORKDIR /opt
 RUN git clone https://github.com/hyperledger/iroha.git
 WORKDIR /opt/iroha
-RUN git checkout feature/fix-sumeragi
 
 WORKDIR /opt/iroha
 RUN git clone https://github.com/real-logic/Aeron.git core/vendor/Aeron
