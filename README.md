@@ -45,11 +45,11 @@ cd /
 tar cvf /var/tmp/iroha.tar usr/local/iroha
 ``` 
 
-Then you can get iroha.tar file on your host directory /var/tmp.
+Then you can get `iroha.tar` file on your host directory `/var/tmp`.
 
 ## 3. iroha-rel
 
-This container based on Ubuntu 16.04 and include IROHA binaries, libraries and configuration files from iroha.tar file which made by iroha container.
+This container based on Ubuntu 16.04 and include IROHA binaries, libraries and configuration files from `iroha.tar` file which made by iroha container.
 
 ``` bash
 docker build -t soramitsu/iroha-rel .
@@ -63,7 +63,7 @@ docker run -it --name iroha-rel --shm-size 512m soramitsu/iroha-rel /bin/bash
 
 ## 4. IROHA configuration
 
-When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is the simplest example of `sumeragi.conf` file for threee instances.
+When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is the simplest example of `sumeragi.conf` file for three instances.
 
 ``` json:sumeragi.json
 {
@@ -92,13 +92,13 @@ When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/
   ]
 }
 ```
- Off coure you should change ip address, publicKey, and privateKey for your real environment.
+Off coure you should change ip address, publicKey, and privateKey for your real environment.
 
-When you testing IROHA, you can use sumeragi_test command in the `/usr/local/iroha/my_test` directory. 
+When you testing IROHA, you can use `sumeragi_test` command in the `/usr/local/iroha/my_test` directory. 
 
 ## 5. IROHA test
 
-You can test your IROHA like this in the case of threee instances.
+You can test your IROHA like this in the case of three instances.
 
 First instance will be run below docker command.
 
