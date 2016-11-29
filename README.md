@@ -8,6 +8,8 @@ IROHA containers are consist of three containers, one is for development environ
 1. iroha
 1. iroha-rel
 
+Also, [iroha-build](iroha-build/) contains building scripts for IROHA on your non dockernized environment.
+
 ## 1. iroha-dev
 
 This container based on Ubuntu 16.04 and install development tools for IROHA.
