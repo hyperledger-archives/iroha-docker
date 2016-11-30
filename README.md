@@ -29,7 +29,7 @@ docker build -t soramitsu/iroha .
 You can run this container as below.
 
 ``` bash
-docker run -it --name iroha --shm-size 512m soramitsu/iroha /bin/bash
+docker run -it --name iroha --shm-size 1g soramitsu/iroha /bin/bash
 ```
 
 For testing it will better for you to use bash command.
@@ -37,7 +37,7 @@ For testing it will better for you to use bash command.
 And also you can make IROHA tar ball by mounting host filesystem on this container.
 
 ``` bash
-docker run -it --name iroha --shm-size 512m -v /var/tmp:/var/tmp soramitsu/iroha /bin/bash
+docker run -it --name iroha --shm-size 1g -v /var/tmp:/var/tmp soramitsu/iroha /bin/bash
 ```
 
 After iroha container started, you can make iroha tarball as below.
@@ -60,7 +60,7 @@ docker build -t soramitsu/iroha-rel .
 You can run this container as below.
 
 ``` bash
-docker run -it --name iroha-rel --shm-size 512m soramitsu/iroha-rel /bin/bash
+docker run -it --name iroha-rel --shm-size 1g soramitsu/iroha-rel /bin/bash
 ```
 
 ## 4. IROHA configuration
@@ -105,20 +105,20 @@ You can test your IROHA like this in the case of three instances.
 First instance will be run below docker command.
 
 ``` bash
-docker run -it --name iroha1 --shm-size 512m -v ${HOST_DIR1}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
+docker run -it --name iroha1 --shm-size 1g -v ${HOST_DIR1}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
 ```
 _HOST_DIR1_ environment variable is a host directory for `sumeragi.json` of 1st instance.
 
 Second instance will be run as below.
 
 ``` bash
-docker run -it --name iroha2 --shm-size 512m -v ${HOST_DIR2}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
+docker run -it --name iroha2 --shm-size 1g -v ${HOST_DIR2}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
 ```
 
 Third instance will be run as below.
 
 ``` bash
-docker run -it --name iroha3 --shm-size 512m -v ${HOST_DIR3}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
+docker run -it --name iroha3 --shm-size 1g -v ${HOST_DIR3}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
 ```
 Then you can run `sumeragi_test` in these three instances as below.
 
