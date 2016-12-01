@@ -25,6 +25,11 @@
       "ip":"172.17.0.5",
       "name":"iroha4",
       "publicKey":"jDQTiJ1dnTSdGH+yuOaPPZIepUj1Xt3hYOvLQTME3V0="
+    },
+    {
+      "ip":"172.17.0.6",
+      "name":"iroha5",
+      "publicKey":"jDQTiJ1dnTSdGH+yuOaPPZIepUj1Xt3hYOvLQTME3V0="
     }
   ]
 }

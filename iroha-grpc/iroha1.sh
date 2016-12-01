@@ -8,7 +8,7 @@ HOME=$(pwd)
 docker stop ${IROHA}
 docker rm ${IROHA}
 
-docker run -it --name ${IROHA} --shm-size 1g \
+docker run -it --name ${IROHA} \
   -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config \
   -v /var/tmp:/var/tmp \
   soramitsu/iroha /bin/bash 

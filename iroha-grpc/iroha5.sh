@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IROHA_NO="3"
+IROHA_NO="5"
 IROHA="iroha${IROHA_NO}"
 
 HOME=$(pwd)

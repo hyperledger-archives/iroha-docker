@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-# iroha - IROHA container (IROHA repository development with gRPC)
+# iroha-grpc - IROHA container (IROHA repository development with gRPC)
 #
 # build : docker build -t soramitsu/iroha-grpc .
 #
@@ -10,8 +10,8 @@ FROM soramitsu/iroha-dev
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t soramitsu/iroha ."
-LABEL RUN="docker run -it --name iroha --shm-size 512m soramitsu/iroha /bin/bash"
+LABEL BUILD="docker build -t soramitsu/iroha-grpc ."
+LABEL RUN="docker run -it --name iroha soramitsu/iroha-grpc /bin/bash"
 
 USER root
 
@@ -19,7 +19,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone https://github.com/hyperledger/iroha.git
+RUN git clone -b feature/iroha-main https://github.com/hyperledger/iroha.git
 WORKDIR /opt/iroha
 
 WORKDIR /opt/iroha
@@ -28,7 +28,8 @@ WORKDIR /opt/iroha
 RUN git clone https://github.com/nlohmann/json.git core/vendor/json
 RUN git clone https://github.com/gvanas/KeccakCodePackage.git core/vendor/KeccakCodePackage
 RUN git clone https://github.com/google/leveldb.git core/vendor/leveldb
-RUN git clone https://github.com/luca3104/ed25519.git core/vendor/ed25519
+## RUN git clone https://github.com/luca3104/ed25519.git core/vendor/ed25519
+RUN git clone https://github.com/MizukiSonoko/ed25519.git core/vendor/ed25519
 RUN git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
 
 ## WORKDIR $IROHA_HOME/core/vendor/Agrona
@@ -37,13 +38,13 @@ RUN git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/v
 ## RUN ./gradlew; echo Force skip noisy test
 ## RUN ./cppbuild/cppbuild
 
-RUN apt install autoconf automake libtool
+RUN apt -y install autoconf automake libtool
 
 WORKDIR /tmp
 RUN git clone -b v3.0.0 https://github.com/google/protobuf.git
 
 WORKDIR /tmp/protobuf
-RUN git cherry-pick 1760feb621a913189b90fe8595fffb74bce84598 && \
+RUN (git cherry-pick 1760feb621a913189b90fe8595fffb74bce84598; echo Force continue)  && \
   ./autogen.sh && \
   ./configure --prefix=/usr && \
   make -j 14 && \
@@ -55,7 +56,7 @@ RUN git clone -b $(curl -L http://grpc.io/release) https://github.com/grpc/grpc
 WORKDIR /tmp/grpc
 RUN git submodule update --init && \
   make && \
-  sudo make install
+  make install
 
 WORKDIR $IROHA_HOME/core/vendor/leveldb
 RUN make
