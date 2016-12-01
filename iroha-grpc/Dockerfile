@@ -1,17 +1,17 @@
 #-----------------------------------------------------------------------
 # iroha-grpc - IROHA container (IROHA repository development with gRPC)
 #
-# build : docker build -t soramitsu/iroha-grpc .
+# build : docker build -t hyperledger/iroha-grpc .
 #
 # Copyright (c) 2016 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
 #-----------------------------------------------------------------------
-FROM soramitsu/iroha-dev
+FROM hyperledger/iroha-dev
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t soramitsu/iroha-grpc ."
-LABEL RUN="docker run -it --name iroha soramitsu/iroha-grpc /bin/bash"
+LABEL BUILD="docker build -t hyperledger/iroha-grpc ."
+LABEL RUN="docker run -it --name iroha hyperledger/iroha-grpc /bin/bash"
 
 USER root
 

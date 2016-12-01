@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------
 # iroha-dev - IROHA development container (base image for iroha)
 #
-# build : docker build -t soramitsu/iroha-dev .
+# build : docker build -t hyperledger/iroha-dev .
 #
 # Copyright (c) 2016 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
@@ -10,7 +10,7 @@ FROM ubuntu
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t soramitsu/iroha-dev ."
+LABEL BUILD="docker build -t hyperledger/iroha-dev ."
 
 USER root
 

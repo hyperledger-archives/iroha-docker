@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------
 # iroha-rel - IROHA container for Release
 #
-# build : docker build -t soramitsu/iroha-rel .
+# build : docker build -t hyperledger/iroha-rel .
 #
 # Copyright (c) 2016 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
@@ -10,8 +10,8 @@ FROM ubuntu
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t soramitsu/iroha-rel ."
-LABEL RUN="docker run -it --name iroha-rel --shm-size 1g soramitsu/iroha-rel /bin/bash"
+LABEL BUILD="docker build -t hyperledger/iroha-rel ."
+LABEL RUN="docker run -it --name iroha-rel --shm-size 1g hyperledger/iroha-rel /bin/bash"
 
 USER root
 

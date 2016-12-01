@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------
 # iroha-build - IROHA building container
 #
-# build : docker build -t soramitsu/iroha-build .
+# build : docker build -t hyperledger/iroha-build .
 #
 # Copyright (c) 2016 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
@@ -10,7 +10,7 @@ FROM ubuntu
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t soramitsu/iroha-build ."
+LABEL BUILD="docker build -t hyperledger/iroha-build ."
 
 USER root
 

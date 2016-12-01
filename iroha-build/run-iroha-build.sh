@@ -12,4 +12,4 @@ docker rm iroha-build
 
 docker run -it --name iroha-build \
   -v /var/tmp:/var/tmp \
-  --shm-size 1g soramitsu/iroha-build /bin/bash
+  --shm-size 1g hyperledger/iroha-build /bin/bash
