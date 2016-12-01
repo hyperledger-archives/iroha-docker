@@ -11,7 +11,7 @@ FROM soramitsu/iroha-dev
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
 LABEL BUILD="docker build -t soramitsu/iroha ."
-LABEL RUN="docker run -it --name iroha --shm-size 512m soramitsu/iroha /bin/bash"
+LABEL RUN="docker run -it --name iroha --shm-size 1g soramitsu/iroha /bin/bash"
 
 USER root
 
@@ -19,7 +19,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone https://github.com/hyperledger/iroha.git
+RUN git clone -b feature/iroha-main https://github.com/hyperledger/iroha.git
 WORKDIR /opt/iroha
 
 WORKDIR /opt/iroha
