@@ -1,9 +1,9 @@
 {
   "me":{
-    "ip":"172.17.0.4",
-    "name":"iroha3",
-    "publicKey":"f5MWZUZK9Ga8XywDia68pH1HLY/Ts0TWBHsxiFDR0ig=",
-    "privateKey":"cChjOJPlXeO6Ji5crv1IVrlHS46IJH1nSBR0vVZS+HQbIlSZwRBgfZoMP6r7sOJwYpssVjzYnEKXKTlwWWQTzg=="
+    "ip":"172.17.0.5",
+    "name":"iroha4",
+    "publicKey":"Sht5opDIxbyK+oNuEnXUs5rLbrvVgb2GjSPfqIYGFdU=",
+    "privateKey":"aGIuSZRhnGfFyeoKNm/NbTylnAvRfMu3KumOEfyT2HPf36jSF22m2JXWrdCmKiDoshVqjFtZPX3WXaNuo9L8WA=="
   },
   "group":[
     {
