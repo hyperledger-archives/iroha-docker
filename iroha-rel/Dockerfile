@@ -11,7 +11,7 @@ FROM ubuntu
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
 LABEL BUILD="docker build -t hyperledger/iroha-rel ."
-LABEL RUN="docker run -it --name iroha-rel --shm-size 1g hyperledger/iroha-rel /bin/bash"
+LABEL RUN="docker run -d --name iroha-rel hyperledger/iroha-rel"
 
 USER root
 
@@ -24,11 +24,14 @@ RUN groupadd -g 168 iroha && \
     echo "export IROHA_HOME=${IROHA_HOME}" >>/usr/local/iroha/.bashrc && \
     echo "export JAVA_HOME=${JAVA_HOME}" >>/usr/local/iroha/.bashrc
 
-RUN apt update && apt -y upgrade
-RUN apt -y install default-jdk
+RUN apt update && apt -y upgrade && apt -y install default-jdk
 
 ADD ./iroha.tar /
 
+RUN echo /usr/local/lib >>/etc/ld.so.conf && \
+    echo /usr/local/iroha/lib >>/etc/ld.so.conf && \
+    ldconfig
+
 WORKDIR /usr/local/iroha
 
-CMD ["/bin/bash","/usr/local/iroha/start_iroha.sh"]
+CMD ["/bin/su","-","iroha","-c","env IROHA_HOME=/usr/local/iroha /usr/local/iroha/bin/iroha-main"]
