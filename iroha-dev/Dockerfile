@@ -41,8 +41,4 @@ RUN apt -y install curl git make g++-5 gcc-5 default-jdk && \
 RUN curl -sSL https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /opt && \
     ln -s /opt/cmake*/bin/c* /usr/local/bin
 
-RUN ln -f -s /bin/bash /bin/sh
-RUN curl -s https://get.sdkman.io | bash && \
-    source "/root/.sdkman/bin/sdkman-init.sh" && (echo 'y' | sdk install gradle 3.0)
-
 CMD ["/bin/bash"]
