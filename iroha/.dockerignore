@@ -1,6 +1,11 @@
 config1
 config2
 config3
+config4
 iroha1.sh
 iroha2.sh
 iroha3.sh
+iroha4.sh
+run-curl.sh
+run-iroha.sh
+run-sumeragi.sh

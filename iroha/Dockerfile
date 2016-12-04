@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-# iroha - IROHA container (IROHA repository development)
+# iroha - IROHA container
 #
 # build : docker build -t hyperledger/iroha .
 #
@@ -11,7 +11,7 @@ FROM hyperledger/iroha-dev
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
 LABEL BUILD="docker build -t hyperledger/iroha ."
-LABEL RUN="docker run -it --name iroha --shm-size 1g hyperledger/iroha /bin/bash"
+LABEL RUN="docker run -d --name iroha hyperledger/iroha"
 
 USER root
 
@@ -19,23 +19,35 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone -b feature/iroha-main https://github.com/hyperledger/iroha.git
-WORKDIR /opt/iroha
+RUN git clone https://github.com/hyperledger/iroha.git
 
-WORKDIR /opt/iroha
-RUN git clone https://github.com/real-logic/Aeron.git core/vendor/Aeron
-RUN git clone https://github.com/real-logic/Agrona.git core/vendor/Agrona
-RUN git clone https://github.com/nlohmann/json.git core/vendor/json
-RUN git clone https://github.com/gvanas/KeccakCodePackage.git core/vendor/KeccakCodePackage
-RUN git clone https://github.com/google/leveldb.git core/vendor/leveldb
-RUN git clone https://github.com/luca3104/ed25519.git core/vendor/ed25519
-RUN git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
+WORKDIR $IROHA_HOME
+RUN git clone https://github.com/nlohmann/json.git core/vendor/json && \
+    git clone https://github.com/gvanas/KeccakCodePackage.git core/vendor/KeccakCodePackage && \
+    git clone https://github.com/google/leveldb.git core/vendor/leveldb && \
+    git clone https://github.com/MizukiSonoko/ed25519.git core/vendor/ed25519 && \
+    git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
 
-WORKDIR $IROHA_HOME/core/vendor/Agrona
-RUN ./gradlew
-WORKDIR $IROHA_HOME/core/vendor/Aeron
-RUN ./gradlew; echo Force skip noisy test
-RUN ./cppbuild/cppbuild
+RUN apt -y install autoconf automake libtool pkg-config
+
+WORKDIR /tmp
+RUN git clone -b v3.0.0 https://github.com/google/protobuf.git
+
+WORKDIR /tmp/protobuf
+RUN (git cherry-pick 1760feb621a913189b90fe8595fffb74bce84598; echo Force continue) && \
+  ./autogen.sh && \
+  ./configure --prefix=/usr && \
+  make -j 14 && \
+  make install
+
+WORKDIR /tmp
+RUN git clone -b $(curl -L http://grpc.io/release) https://github.com/grpc/grpc
+
+WORKDIR /tmp/grpc
+RUN git submodule update --init && \
+  make && \
+  make install
+
 WORKDIR $IROHA_HOME/core/vendor/leveldb
 RUN make
 WORKDIR $IROHA_HOME/core/vendor/ed25519
@@ -45,30 +57,27 @@ RUN make && make generic64/libkeccak.a
 WORKDIR $IROHA_HOME/core/infra/crypto
 RUN make
 
-RUN mkdir /opt/iroha/build
-WORKDIR /opt/iroha/build
+RUN mkdir $IROHA_HOME/build
+WORKDIR $IROHA_HOME/build
 RUN cmake ..
 RUN make
 
-RUN mkdir /usr/local/iroha
-RUN rsync -av /opt/iroha/build/bin /usr/local/iroha
-RUN rsync -av /opt/iroha/config    /usr/local/iroha
-RUN rsync -av /opt/iroha/build/lib /usr/local/iroha
-RUN rsync -av /opt/iroha/build/my_test_bin /usr/local/iroha
-RUN rsync -av /opt/iroha/core/vendor/Aeron/aeron-driver/build/libs /usr/local/iroha
+ENV IROHA_HOME /usr/local/iroha
 
-COPY ./start_iroha.sh /usr/local/iroha/start_iroha.sh
+RUN mkdir $IROHA_HOME && \
+    rsync -av /opt/iroha/build/bin $IROHA_HOME && \
+##  rsync -av /opt/iroha/config $IROHA_HOME && \
+    rsync -av /opt/iroha/build/lib $IROHA_HOME && \
+    rsync -av /opt/iroha/build/my_test_bin $IROHA_HOME && \
+    rsync -av /opt/iroha/build/test_bin $IROHA_HOME && \
+    rsync -av /opt/iroha/core/vendor/ed25519/lib $IROHA_HOME
 
-RUN rm -fr /opt/iroha
-RUN apt remove -y --purge git g++-5 gcc-5 make curl
-RUN apt remove -y --purge libhdf5-serial-dev libleveldb-dev libsnappy-dev liblmdb-dev
-RUN apt remove -y --purge libssl-dev snappy unzip xsltproc zlib1g-dev
-RUN rm -fr /root/.sdkman
+COPY ./test.sh ./mkiroha-tar.sh ${IROHA_HOME}/
 
-RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /home/iroha/.bashrc
-RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /root/.bashrc
+RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /home/iroha/.bashrc && \
+    sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /root/.bashrc
 
 ## USER iroha
-WORKDIR /usr/local/iroha
+WORKDIR $IROHA_HOME
 
-CMD ["/bin/bash","/usr/local/iroha/start_iroha.sh"]
+CMD ["/bin/su","-","iroha","-c","env IROHA_HOME=/usr/local/iroha /usr/local/iroha/bin/iroha-main"]
