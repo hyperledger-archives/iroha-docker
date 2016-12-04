@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IROHA_NO="1"
+IROHA_NO="4"
 IROHA="iroha${IROHA_NO}"
 
 HOME=$(pwd)
@@ -8,7 +8,6 @@ HOME=$(pwd)
 docker stop ${IROHA}
 docker rm ${IROHA}
 
-docker run -it --name ${IROHA} \
+docker run -d --name ${IROHA} \
   -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config \
-  -v /var/tmp:/var/tmp \
-  hyperledger/iroha /bin/bash
+  hyperledger/iroha
