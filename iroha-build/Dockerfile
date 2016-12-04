@@ -14,10 +14,6 @@ LABEL BUILD="docker build -t hyperledger/iroha-build ."
 
 USER root
 
-COPY ./iroha_prep.sh  /usr/local/bin/iroha_prep.sh
-COPY ./iroha_build.sh /usr/local/bin/iroha_build.sh
-COPY ./start_iroha.sh /usr/local/bin/start_iroha.sh
-COPY ./test.sh        /usr/local/bin/test.sh
-RUN  chmod 0755       /usr/local/bin/test.sh
+COPY iroha_prep.sh iroha_build.sh test.sh /usr/local/iroha/
 
 CMD ["/bin/bash"]

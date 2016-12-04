@@ -8,6 +8,7 @@
 #-----------------------------------------------------------------------
 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 export IROHA_HOME=~/iroha
 export IROHA_DEST=/usr/local/iroha
 
@@ -16,20 +17,31 @@ git clone https://github.com/hyperledger/iroha.git
 
 cd ${IROHA_HOME}
 
-git clone https://github.com/real-logic/Aeron.git core/vendor/Aeron
-git clone https://github.com/real-logic/Agrona.git core/vendor/Agrona
 git clone https://github.com/nlohmann/json.git core/vendor/json
 git clone https://github.com/gvanas/KeccakCodePackage.git core/vendor/KeccakCodePackage
 git clone https://github.com/google/leveldb.git core/vendor/leveldb
-git clone https://github.com/luca3104/ed25519.git core/vendor/ed25519
+git clone https://github.com/MizukiSonoko/ed25519.git core/vendor/ed25519
 git clone --recursive https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
 
-cd ${IROHA_HOME}/core/vendor/Agrona
-./gradlew
+apt -y install autoconf automake libtool pkg-config
 
-cd ${IROHA_HOME}/core/vendor/Aeron
-./gradlew
-./cppbuild/cppbuild
+cd /tmp
+git clone -b v3.0.0 https://github.com/google/protobuf.git
+
+cd protobuf
+git cherry-pick 1760feb621a913189b90fe8595fffb74bce84598
+./autogen.sh
+./configure --prefix=/usr
+make -j 14
+make install
+
+cd /tmp
+git clone -b $(curl -L http://grpc.io/release) https://github.com/grpc/grpc
+
+cd grpc
+git submodule update --init
+make
+make install
 
 cd ${IROHA_HOME}/core/vendor/leveldb
 make
