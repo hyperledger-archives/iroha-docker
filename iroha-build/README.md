@@ -27,6 +27,7 @@ After execution of this script, _iroha_ user account was created and several dev
 
 ``` bash
 su - iroha
+cd /usr/local/iroha
 bash iroha_build.sh
 ```
 
