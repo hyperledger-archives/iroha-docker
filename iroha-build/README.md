@@ -9,26 +9,35 @@ IROHA will building  easily by using below shell scripts.
 
 ## 1. iroha_prep.sh
 
-This shell run by root user on Ubuntu 16.04.
+[iroha_prep.sh](iroha_prep.sh) run by _root_ user on Ubuntu 16.04.
 
 ``` bash
 bash iroha_prep.sh
 ```
 
-After execution of `iroha_prep.sh` script, _iroha_ user account was created and several development tools were installed on your environment.
+After execution of this script, _iroha_ user account was created and several development tools will be installed on your environment.
 
 ## 2. iroha_build.sh
 
-This shell run by _iroha_ user which created by `iroha_prep.sh` scripts.
+[iroha_build.sh](iroha_build.sh) run by _iroha_ user which created by `iroha_prep.sh` scripts.
 
 <div>
 <table><tr><td><b>Note</b>: iroha_build.sh script must run by <b>iroha</b> user. </td></tr></table>
 </div>
 
 ``` bash
+su - iroha
 bash iroha_build.sh
 ```
 
+This script using several `sudo` commands, so you should enter IROHA's password.
+
+```
+[sudo] password for iroha: 
+```
+
+`iroha_prep.sh` has been created IROHA's password as `passw0rd`, so you should type this at above prompt.
+ 
 This shell will be done below functions.
 
 1. Cloning _IROHA_ from Hyperledger Project Official repositories on [github](https://github.com/hyperledger/iroha) .
@@ -37,28 +46,82 @@ This shell will be done below functions.
 1.  Make IROHA directory on `/usr/local` as `/usr/local/iroha`.
 1. Copy IROHA binaries, libraries and configuration files to IROHA directory.
 
-## 3. Testing IROHA
+After `iroha_build.sh` script execution, you can use IROHA on your `/usr/local/iroha` directories.
 
-You can test IROHA environment as follows.
+## 3. Docker container
 
-At first you should restart java Aeron driver.
+If you want to use `iroha_build` repository on your docker container, you can use as below.
 
-``` bash
-ps -ef | grep java
-kill <pid of java>
+### 3.1 Build Docker
 
-cd /usr/local/iroha
-bash start_iroha.sh
-```
-
-You can test IROHA functions using by `test.sh` script on `/usr/local/iroha` directory.
+At first you wil build container as below.
 
 ``` bash
-cd /usr/local/iroha
-./test.sh
+docker build -t hyperledger/iroha-build .
 ```
 
-After IROHA build successfully, you can see `[ PASSED ] 5 tests.` message on the last line of `test.sh` window.
+Then you can run `iroha-build` container as below.
+
+``` bash
+docker run -it --name iroha-build hyperledger/iroha-build /bin/bash
+```
+
+### 3.2 Build IROHA
+
+After that, you can build IROHA in `iroha-build` container as below.
+
+``` bash
+cd /usr/local/iroha
+bash iroha_prep.sh
+su - iroha
+cd /usr/local/iroha
+bash iroha_build.sh
+```
+
+### 3.3 Commit Container
+
+Now, you can commit this container, as below.
+
+``` bash
+docker commit <container id> hyperledger/iroha-build
+```
+
+### 3.4 Running Container
+
+Then, you can run this container like this.
+
+``` bash
+HOME=$(pwd)
+docker run -d --name iroha-build \
+  -v ${HOME}/../iroha/config1:/usr/local/iroha/config \
+  hyperledger/iroha-build /bin/su - iroha -c "env IROHA_HOME=/usr/local/iroha /usr/local/iroha/bin/iroha-main"
+```
+
+In this example, we are using sample configuration file which provided by `iroha` in the [iroha-docker](https://github.com/hyperledger/iroha-docker/) repository.
+
+### 3.5 Running Containers by Script 
+
+You can run `iroha-build` containers using by [run-iroha-build.sh](run-iroha-buiild.sh) script.
+
+``` bash
+./run-iroha-build.sh
+```
+
+This script runs four containers on your host machine.
+
+### 3.6 Show Logs
+
+You can show logs of the container, as below.
+
+``` bash
+docker logs -f iroha-build
+```
+
+Or
+
+``` bash
+docker logs -f iroha1 # iroha1 ... iroha4
+```
 
 Have fun!
 
@@ -80,4 +143,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
