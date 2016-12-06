@@ -15,7 +15,7 @@ Also, [iroha-build](iroha-build/) contains building scripts for IROHA on your no
 This container based on Ubuntu 16.04 and install development tools for IROHA.
 
 ``` bash
-docker build -t soramitsu/iroha-dev .
+docker build -t hyperledger/iroha-dev .
 ```
 
 ## 2. iroha
@@ -23,13 +23,13 @@ docker build -t soramitsu/iroha-dev .
 This container based on iroha-dev image and include IROHA repository to make binaries for IROHA.
 
 ``` bash
-docker build -t soramitsu/iroha .
+docker build -t hyperledger/iroha .
 ```
 
 You can run this container as below.
 
 ``` bash
-docker run -it --name iroha --shm-size 1g soramitsu/iroha /bin/bash
+docker run -d --name iroha hyperledger/iroha
 ```
 
 For testing it will better for you to use bash command.
@@ -37,15 +37,17 @@ For testing it will better for you to use bash command.
 And also you can make IROHA tar ball by mounting host filesystem on this container.
 
 ``` bash
-docker run -it --name iroha --shm-size 1g -v /var/tmp:/var/tmp soramitsu/iroha /bin/bash
+docker run -it --name iroha -v /var/tmp:/var/tmp hyperledger/iroha /bin/bash
 ```
 
 After iroha container started, you can make iroha tarball as below.
 
 ``` bash
 cd /
-tar cvf /var/tmp/iroha.tar usr/local/iroha
+tar cvf /var/tmp/iroha.tar usr/lib/libproto* usr/local
 ``` 
+
+You can use [mkiroha-tar.sh](iroha/mkiroha-tar.sh) scripts on `/usr/local/iroha` directory for your convenience.
 
 Then you can get `iroha.tar` file on your host directory `/var/tmp`.
 
@@ -54,18 +56,18 @@ Then you can get `iroha.tar` file on your host directory `/var/tmp`.
 This container based on Ubuntu 16.04 and include IROHA binaries, libraries and configuration files from `iroha.tar` file which made by iroha container.
 
 ``` bash
-docker build -t soramitsu/iroha-rel .
+docker build -t hyperledger/iroha-rel .
 ```
 
 You can run this container as below.
 
 ``` bash
-docker run -it --name iroha-rel --shm-size 1g soramitsu/iroha-rel /bin/bash
+docker run -d --name iroha-rel hyperledger/iroha-rel
 ```
 
 ## 4. IROHA configuration
 
-When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is the simplest example of `sumeragi.conf` file for three instances.
+When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is simple example of [sumeragi.conf](iroha/config1/sumeragi.json) file for four instances. You should change this file of your real network environment.
 
 ``` json:sumeragi.json
 {
@@ -84,12 +86,17 @@ When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/
     {
       "ip":"172.17.0.3",
       "name":"iroha2",
-      "publicKey":"jDQTiJ1dnTSdGH+yuOaPPZIepUj1Xt3hYOvLQTME3V0="
+      "publicKey":"Q5PaQEBPQLALfzYmZyz9P4LmCNfgM5MdN1fOuesw3HY="
     },
     {
       "ip":"172.17.0.4",
       "name":"iroha3",
-      "publicKey":"jDQTiJ1dnTSdGH+yuOaPPZIepUj1Xt3hYOvLQTME3V0="
+      "publicKey":"f5MWZUZK9Ga8XywDia68pH1HLY/Ts0TWBHsxiFDR0ig="
+    },
+    {
+      "ip":"172.17.0.5",
+      "name":"iroha4",
+      "publicKey":"Sht5opDIxbyK+oNuEnXUs5rLbrvVgb2GjSPfqIYGFdU="
     }
   ]
 }
@@ -100,54 +107,101 @@ When you testing IROHA, you can use `sumeragi_test` command in the `/usr/local/i
 
 ## 5. IROHA test
 
-You can test your IROHA like this in the case of three instances.
+You can test your IROHA like this in the case of four instances.
 
-First instance will be run below docker command.
+### 5.1 Running IROHA
 
-``` bash
-docker run -it --name iroha1 --shm-size 1g -v ${HOST_DIR1}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
-```
-_HOST_DIR1_ environment variable is a host directory for `sumeragi.json` of 1st instance.
-
-Second instance will be run as below.
+You can run IROHA containers using by [run-iroha.sh](iroha/run-iroha.sh) script.
 
 ``` bash
-docker run -it --name iroha2 --shm-size 1g -v ${HOST_DIR2}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
+./run-iroha.sh
 ```
 
-Third instance will be run as below.
+Four IROHA's container will be running as below.
+
+```
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+19fec9daa721        hyperledger/iroha   "/bin/su - iroha -c '"   3 seconds ago       Up 2 seconds                            iroha4
+8fe12c100517        hyperledger/iroha   "/bin/su - iroha -c '"   4 seconds ago       Up 3 seconds                            iroha3
+0852acdc74b8        hyperledger/iroha   "/bin/su - iroha -c '"   4 seconds ago       Up 3 seconds                            iroha2
+70db7f427307        hyperledger/iroha   "/bin/su - iroha -c '"   5 seconds ago       Up 4 seconds  
+```
+
+### 5.2 IROHA logs
+
+Then you can see IROHA container logs using by docker command.
 
 ``` bash
-docker run -it --name iroha3 --shm-size 1g -v ${HOST_DIR3}/sumeragi.json:/usr/local/iroha/config soramitsu/iroha-rel /bin/bash
+docker logs iroha1
 ```
-Then you can run `sumeragi_test` in these three instances as below.
+
+or display logs forever mode as you like.
 
 ``` bash
-bash start_iroha.sh
+docker logs -f iroha1
 ```
 
-You can see _aeron_driver is running like this.
+### 5.3 Testing IROHA
+
+You can test IROHA simply by REST/API using by [run-curl.sh](iroha/run-curl.sh)  script. Below is an example of `run-curl.sh` execution.
 
 ```
-root@417e46fd8439:/usr/local/iroha# ps -ef
-UID        PID  PPID  C STIME TTY          TIME CMD
-root         1     0  0 12:38 ?        00:00:00 /bin/bash
-root        10     1  0 12:39 ?        00:00:00 /bin/bash
-iroha       13     1 12 12:39 ?        00:00:02 java -cp /usr/local/iroha/libs/a
+# ./run-curl.sh 
+POST    "172.17.0.2:1204" "/asset/operation"
+REQUEST {"command":"add","domain":"iroha","name":"iroha2"}
+REPLY   {"message":"OK","status":200}
 ```
 
-Then you can use `sumeragi_test` command.
+Then you can run `sumeragi_test` for testing continuesly consensused by `sumeragi` on IROHA.
+
+For example, you can run [run-sumeragi.sh](iroha/run-sumeragi.sh) script and you'll ty below commands as below.
+
+```
+# ./run-sumeragi.sh
+# su - iroha
+$ cd /usr/local/iroha/my_test_bin
+$ ./sumeragi_test public 
+```
+
+`sumeragi_test` will be running as below.
+
+```
+$ ./sumeragi_test public
+=========
+jDQTiJ1dnTSdGH+yuOaPPZIepUj1Xt3hYOvLQTME3V0=
+172.17.0.2
+=========
+Q5PaQEBPQLALfzYmZyz9P4LmCNfgM5MdN1fOuesw3HY=
+172.17.0.3
+=========
+f5MWZUZK9Ga8XywDia68pH1HLY/Ts0TWBHsxiFDR0ig=
+172.17.0.4
+=========
+Sht5opDIxbyK+oNuEnXUs5rLbrvVgb2GjSPfqIYGFdU=
+172.17.0.5
+1480987886[sumeragi] +==ーーーーーーーーー==+
+1480987886[sumeragi] |+-ーーーーーーーーー-+|
+1480987886[sumeragi] || 　　　　　　　　　 ||
+1480987886[sumeragi] || いろは合意形成機構 ||
+1480987886[sumeragi] || 　　　すめらぎ　　 ||
+1480987886[sumeragi] || 　　　　　　　　　 ||
+1480987886[sumeragi] |+-ーーーーーーーーー-+|
+1480987886[sumeragi] +==ーーーーーーーーー==+
+1480987886[sumeragi] - 起動/setup
+1480987886[sumeragi] - 初期設定/initialize
+```
+
+You can show each container's log by `docker logs` command as you like.
 
 ``` bash
-su - iroha
-cd my_test_bin
-./sumeragi_test
+docker logs -f iroha1
 ```
 
-Last instance will be need _public_ argument for `sumeragi_test` command.
+Docker containers will be stopped by `docker stop` command.
 
 ``` bash
-./sumeragi_test public
+docker stop $(docker ps -a -q)
 ```
 
 Have fun!
