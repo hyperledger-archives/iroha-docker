@@ -124,6 +124,63 @@ Or
 docker logs -f iroha1 # iroha1 ... iroha4
 ```
 
+## 4. Virtual Environment or Bare Metal
+
+Really,  you can build IROHA on your Virtual Environment or Bare Metal.
+
+### 4.1 Update Ubuntu
+
+At first, you'll update Ubuntu. `<user>` is your account on this machine.
+
+``` bash
+sudo apt update
+[sudo] password for <user>:
+sudo apt -y upgrade
+```
+
+### 4.2 Create Git account
+
+Create Git account as below.
+
+``` bash
+sudo groupadd -g 1001 git
+sudo useradd -u 1001 -c "Git Administrator" -s /bin/bash -m -g git git
+```
+
+### 4.3 Clone iroha-docker
+
+Make git repository and clone `iroha-docker` on it.
+
+``` bash
+sudo apt -y install git
+mkdir git/hyperledger
+sudo chgrp -R git git
+sudo chmod -R 2775 git
+cd git/hyperledger
+git clone https://github.com/hyperledger/iroha-docker
+```
+
+### 4.4 Run iroha-prep
+
+Running `iroha-prep.sh` script to prepare development tools for building IROHA.
+
+``` bash
+sudo -i
+cd /home/<user>/git/hyperledger/iroha-docker/iroha-build
+./iroha_prep.sh
+```
+
+### 4.5 Run iroha_build
+
+Running `iroha_build.sh` to building IROHA.
+
+``` bash
+su - iroha
+cd /home/<user>/git/hyperledger/iroha-docker/iroha-build
+./iroha_build.sh
+```
+After this script running, IROHA will successfully build on your `/usr/local/iroha` directory.
+
 Have fun!
 
 # Author
