@@ -19,7 +19,7 @@ After execution of this script, _iroha_ user account was created and several dev
 
 ## 2. iroha_build.sh
 
-[iroha_build.sh](iroha_build.sh) run by _iroha_ user which created by `iroha_prep.sh` scripts.
+[iroha_build.sh](iroha_build.sh) run by _iroha user_ which created by `iroha_prep.sh` scripts.
 
 <div>
 <table><tr><td><b>Note</b>: iroha_build.sh script must run by <b>iroha</b> user. </td></tr></table>
@@ -30,7 +30,7 @@ su - iroha
 bash iroha_build.sh
 ```
 
-This script using several `sudo` commands, so you should enter IROHA's password.
+This script using several `sudo` commands, so you should enter _iroha user's_ password.
 
 ```
 [sudo] password for iroha: 
@@ -54,13 +54,13 @@ If you want to use `iroha_build` repository on your docker container, you can us
 
 ### 3.1 Build Docker
 
-At first you wil build container as below.
+At first you'll build container as below.
 
 ``` bash
 docker build -t hyperledger/iroha-build .
 ```
 
-Then you can run `iroha-build` container as below.
+Then you can run `iroha-build` container.
 
 ``` bash
 docker run -it --name iroha-build hyperledger/iroha-build /bin/bash
@@ -68,7 +68,7 @@ docker run -it --name iroha-build hyperledger/iroha-build /bin/bash
 
 ### 3.2 Build IROHA
 
-After that, you can build IROHA in `iroha-build` container as below.
+After that, you can build IROHA in the `iroha-build` container.
 
 ``` bash
 cd /usr/local/iroha
@@ -80,7 +80,7 @@ bash iroha_build.sh
 
 ### 3.3 Commit Container
 
-Now, you can commit this container, as below.
+Now, you can commit this container.
 
 ``` bash
 docker commit <container id> hyperledger/iroha-build
