@@ -101,7 +101,7 @@ When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/
   ]
 }
 ```
-Off coure you should change ip address, publicKey, and privateKey for your real environment.
+Off course you should change ip address, publicKey, and privateKey for your real environment.
 
 ## 5. IROHA test
 
