@@ -67,7 +67,7 @@ docker run -d --name iroha-rel hyperledger/iroha-rel
 
 ## 4. IROHA configuration
 
-When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is simple example of [sumeragi.conf](iroha/config1/sumeragi.json) file for four instances. You should change this file of your real network environment.
+When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is simple example of [sumeragi.conf](iroha/config1/sumeragi.json) file for four instances.
 
 ``` json:sumeragi.json
 {
@@ -102,8 +102,6 @@ When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/
 }
 ```
 Off coure you should change ip address, publicKey, and privateKey for your real environment.
-
-When you testing IROHA, you can use `sumeragi_test` command in the `/usr/local/iroha/my_test` directory. 
 
 ## 5. IROHA test
 
