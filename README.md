@@ -199,7 +199,7 @@ docker logs -f iroha1
 Docker containers will be stopped by `docker stop` command.
 
 ``` bash
-docker stop $(docker ps -a -q)
+docker stop $(docker ps -q)
 ```
 
 Have fun!
