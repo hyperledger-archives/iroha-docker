@@ -51,6 +51,8 @@ curl -sSL https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | \
 
 ln -s /opt/cmake*/bin/c* /usr/local/bin
 
-chown iroha:iroha ${IROHA_HOME}/*.sh
+mkdir -p ${IROHA_HOME}
+rsync -av ./*.sh ${IROHA_HOME}
+chown -R iroha:iroha ${IROHA_HOME}
 
 exit 0
