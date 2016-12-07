@@ -8,6 +8,12 @@ IROHA containers are consist of three containers, one is for development environ
 1. iroha
 1. iroha-rel
 
+| Container | Description |
+| --- | --- |
+| iroha-dev |Base Image for Iroha Container, which include development tools  |
+| iroha |IROHA building Container, which can run IROHA server  |
+| iroha-rel | IROHA Release Container, which incude IROHA server binaries only (minimum image size) |
+
 Also, [iroha-build](iroha-build/) contains building scripts for IROHA on your non dockernized environment.
 
 ## 1. iroha-dev
@@ -199,7 +205,7 @@ docker logs -f iroha1
 Docker containers will be stopped by `docker stop` command.
 
 ``` bash
-docker stop $(docker ps -q)
+docker stop $(docker ps -a -q)
 ```
 
 Have fun!
