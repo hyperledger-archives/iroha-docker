@@ -134,7 +134,6 @@ At first, you'll update Ubuntu. `<user>` is your account on this machine.
 
 ``` bash
 sudo apt update
-[sudo] password for <user>:
 sudo apt -y upgrade
 ```
 
@@ -153,7 +152,7 @@ Make git repository and clone `iroha-docker` on it.
 
 ``` bash
 sudo apt -y install git
-mkdir git/hyperledger
+mkdir -p git/hyperledger
 sudo chgrp -R git git
 sudo chmod -R 2775 git
 cd git/hyperledger
