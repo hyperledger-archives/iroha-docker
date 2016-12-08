@@ -1,4 +1,4 @@
-# Dcokerfiles for IROHA
+# Dockerfiles for IROHA
 
 [IROHA](http://iroha.tech/) is a simple Distributed Ledger Technology software.
 
@@ -18,7 +18,7 @@ Also, [iroha-build](iroha-build/) contains building scripts for IROHA on your no
 
 ## 1. iroha-dev
 
-This container based on Ubuntu 16.04 and install development tools for IROHA.
+This container is based on Ubuntu 16.04 and installs development tools for IROHA.
 
 ``` bash
 docker build -t hyperledger/iroha-dev .
@@ -26,13 +26,13 @@ docker build -t hyperledger/iroha-dev .
 
 ## 2. iroha
 
-This container based on iroha-dev image and include IROHA repository to make binaries for IROHA.
+This container is based on the iroha-dev image and includes the IROHA repository to make binaries for IROHA.
 
 ``` bash
 docker build -t hyperledger/iroha .
 ```
 
-You can run this container as below.
+You can run this container as below:
 
 ``` bash
 docker run -d --name iroha hyperledger/iroha
@@ -40,13 +40,13 @@ docker run -d --name iroha hyperledger/iroha
 
 For testing it will better for you to use bash command.
 
-And also you can make IROHA tar ball by mounting host filesystem on this container.
+You can also make an IROHA tar ball by mounting the host filesystem on this container.
 
 ``` bash
 docker run -it --name iroha -v /var/tmp:/var/tmp hyperledger/iroha /bin/bash
 ```
 
-After iroha container started, you can make iroha tarball as below.
+After the iroha container is started, you can make the iroha tarball as below.
 
 ``` bash
 cd /
@@ -59,13 +59,13 @@ Then you can get `iroha.tar` file on your host directory `/var/tmp`.
 
 ## 3. iroha-rel
 
-This container based on Ubuntu 16.04 and include IROHA binaries, libraries and configuration files from `iroha.tar` file which made by iroha container.
+This container is based on Ubuntu 16.04 and includes IROHA binaries, libraries and configuration files from `iroha.tar` file which is made by the iroha container.
 
 ``` bash
 docker build -t hyperledger/iroha-rel .
 ```
 
-You can run this container as below.
+You can run this container as below:
 
 ``` bash
 docker run -d --name iroha-rel hyperledger/iroha-rel
@@ -73,7 +73,7 @@ docker run -d --name iroha-rel hyperledger/iroha-rel
 
 ## 4. IROHA configuration
 
-When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` deirectory. Below is simple example of [sumeragi.conf](iroha/config1/sumeragi.json) file for four instances.
+When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/local/iroha/config` directory. Below is simple example of [sumeragi.conf](iroha/config1/sumeragi.json) file for four instances.
 
 ``` json:sumeragi.json
 {
@@ -107,7 +107,7 @@ When you running IROHA,  you should configure `sumeragi.json` file in the `/usr/
   ]
 }
 ```
-Off course you should change ip address, publicKey, and privateKey for your real environment.
+Of course you should change the IP address, publicKey, and privateKey for your real environment.
 
 ## 5. IROHA test
 
