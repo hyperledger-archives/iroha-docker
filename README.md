@@ -2,6 +2,14 @@
 
 [IROHA](http://iroha.tech/) is a simple Distributed Ledger Technology software.
 
+<div>
+<table><tr><td>
+This _feature/fix-cappuccino_ branch is the Hot-Fix version to solve building problem in _Cappuccino_.
+_Cuppuccino_ is the library which is use in IROHA.
+</td></tr>
+</table>
+</div>
+
 IROHA containers are consist of three containers, one is for development environment based on Ubuntu 16.04. Second container is iroha repository building container, which can run IROHA. Last container is production level container  which reduced image size by IROHA runtimes and configuration files only.
 
 1. iroha-dev

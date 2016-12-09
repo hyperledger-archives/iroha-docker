@@ -28,6 +28,8 @@ RUN git clone https://github.com/nlohmann/json.git core/vendor/json && \
     git clone https://github.com/MizukiSonoko/ed25519.git core/vendor/ed25519 && \
     git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
 
+RUN cd /opt/iroha/core/vendor/Cappuccino && git reset --hard c28585a5f422f2514e65bc0fcbe453fc334e5cd2
+
 RUN apt -y install autoconf automake libtool pkg-config
 
 WORKDIR /tmp
