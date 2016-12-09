@@ -4,8 +4,8 @@
 
 <div>
 <table><tr><td>
-This _feature/fix-cappuccino_ branch is the Hot-Fix version to solve building problem in _Cappuccino_.
-_Cuppuccino_ is the library which is use in IROHA.
+This feature/fix-cappuccino branch is the Hot-Fix version to solve building problem in _Cappuccino_.
+Cuppuccino is the library which is using in IROHA.
 </td></tr>
 </table>
 </div>
