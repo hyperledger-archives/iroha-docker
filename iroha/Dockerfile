@@ -19,16 +19,8 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone https://github.com/hyperledger/iroha.git
-
-WORKDIR $IROHA_HOME
-RUN git clone https://github.com/nlohmann/json.git core/vendor/json && \
-    git clone https://github.com/gvanas/KeccakCodePackage.git core/vendor/KeccakCodePackage && \
-    git clone https://github.com/google/leveldb.git core/vendor/leveldb && \
-    git clone https://github.com/MizukiSonoko/ed25519.git core/vendor/ed25519 && \
-    git clone --recursive  https://github.com/MizukiSonoko/Cappuccino.git core/vendor/Cappuccino
-
-RUN apt -y install autoconf automake libtool pkg-config
+RUN git clone --recursive https://github.com/hyperledger/iroha.git iroha; \
+    apt -y install autoconf automake libtool pkg-config
 
 WORKDIR /tmp
 RUN git clone -b v3.0.0 https://github.com/google/protobuf.git
