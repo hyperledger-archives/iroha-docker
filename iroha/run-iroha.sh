@@ -18,9 +18,17 @@ for i in 1 2 3 4; do
   echo "# docker rm ${IROHA}"
   docker rm ${IROHA}
 
+  if [ $i -eq 4 ]; then
+  echo "# docker run -d --name ${IROHA} -p1204:1204 -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config hyperledger/${IROHA_NAME}"
+
+  docker run -d --name ${IROHA} -p1204:1204 \
+    -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config \
+    hyperledger/${IROHA_NAME}
+  else
   echo "# docker run -d --name ${IROHA} -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config hyperledger/${IROHA_NAME}"
 
   docker run -d --name ${IROHA} \
     -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config \
     hyperledger/${IROHA_NAME}
+  fi
 done
