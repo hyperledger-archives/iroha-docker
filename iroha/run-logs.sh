@@ -1,14 +1,14 @@
 #!/bin/bash
 
-n=1
 
 if tty | grep -q pts 2>%1 >/dev/null; then
   # For Ubuntu
   TTY="/dev/pts/"
-  ((n-=1))
+  n=0
 else
   # For MacOS
   TTY="/dev/ttys00"
+  n=1
 fi
 
 for i in 1 2 3 4; do
