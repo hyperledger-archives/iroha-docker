@@ -11,6 +11,10 @@ else
   n=1
 fi
 
+if [ $# -gt 0 ]; then
+  n="$1"
+fi
+
 for i in 1 2 3 4; do
   docker logs -f iroha$i >${TTY}${n} &
 
