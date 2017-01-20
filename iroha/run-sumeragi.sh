@@ -1,9 +1,17 @@
 #!/bin/bash
 
-HOME=$(pwd)
+VENDOR="hyperledger"
 
-IROHA_NO="3"
-IROHA="iroha${IROHA_NO}"
+IH_NAME="iroha"
+
+IH_HOME="/usr/local/iroha"
+
+NO="3"
+IROHA="iroha${NO}"
+
+IH_NET="iroha_net"
+IH_SUBNET="10.0.168.0/24"
+IH_IP=$(echo "$(echo ${IH_SUBNET} | cut -d'.' -f1-3).$((NO+1))")
 
 echo "# docker stop ${IROHA}"
 docker stop ${IROHA}
@@ -11,8 +19,10 @@ docker stop ${IROHA}
 echo "# docker rm ${IROHA}"
 docker rm ${IROHA}
 
-echo "# docker run -it --name ${IROHA} -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config hyperledger/iroha /bin/bash"
+echo "# docker run -it --name ${IROHA} -v ${IH_HOME}/config/config${NO}:${IH_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME} /bin/bash"
 
 docker run -it --name ${IROHA} \
-  -v ${HOME}/config${IROHA_NO}:/usr/local/iroha/config \
-  hyperledger/iroha /bin/bash
+  -v ${IH_HOME}/config/config${NO}:${IH_HOME}/config \
+  -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
+  --network=${IH_NET} --ip=${IH_IP} \
+  ${VENDOR}/${IH_NAME} /bin/bash
