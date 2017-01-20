@@ -26,7 +26,13 @@ fi
 
 IH_NODES=4
 
-IH_HOME="/usr/local/iroha"
+IROHA_HOME="/usr/local/iroha"
+
+if [ "$(uname -s)" == "Linux" ]; then
+  IH_HOME="${IROHA_HOME}"
+else
+  IH_HOME="${HOME}/iroha"
+fi
 
 IH_UID=168
 IH_GID=168
@@ -59,8 +65,10 @@ if [ ! -d ${IH_HOME}/ledger ]; then
   echo "# mkdir ${IH_HOME}/ledger"
   mkdir ${IH_HOME}/ledger
 
-  echo "# chown ${IH_UID}:${IH_GID} ${IH_HOME}/ledger"
-  chown ${IH_UID}:${IH_GID} ${IH_HOME}/ledger
+  if [ "$(uname -s)" == "Linux" ]; then
+    echo "# chown ${IH_UID}:${IH_GID} ${IH_HOME}/ledger"
+    chown ${IH_UID}:${IH_GID} ${IH_HOME}/ledger
+  fi
 
   echo "# cd ${IH_HOME}/ledger"
   cd ${IH_HOME}/ledger
@@ -70,11 +78,13 @@ if [ ! -d ${IH_HOME}/ledger ]; then
     echo "# mkdir iroha_ledger${NO}"
     mkdir iroha_ledger${NO}
 
-    echo "# chown ${IH_UID}:${IH_GID} iroha_ledger${NO}"
-    chown ${IH_UID}:${IH_GID} iroha_ledger${NO}
+    if [ "$(uname -s)" == "Linux" ]; then
+      echo "# chown ${IH_UID}:${IH_GID} iroha_ledger${NO}"
+      chown ${IH_UID}:${IH_GID} iroha_ledger${NO}
 
-    echo "# chmod 0700 iroha_ledger${NO}"
-    chmod 0700 iroha_ledger${NO}
+      echo "# chmod 0700 iroha_ledger${NO}"
+      chmod 0700 iroha_ledger${NO}
+    fi
 
     ((NO+=1))
   done
@@ -88,15 +98,17 @@ NET_ID=$(docker network list --filter NAME=${IH_NET} -q)
 if [ "${NET_ID}" == "" ]; then
   docker network create --subnet=${IH_SUBNET} ${IH_NET}
 else
-  SUBNET=$(ip route | grep ${NET_ID} | cut -d' ' -f1)
+  if [ "$(uname -s)" == "Linux" ]; then
+    SUBNET=$(ip route | grep ${NET_ID} | cut -d' ' -f1)
 
-  if [ "$IH_SUBNET" != "$SUBNET" ]; then
-    echo "*ERROR* \"${IH_NET}\" subnet value different from \"${IH_SUBNET}\"."
-    ip route | grep ${NET_ID}
-    echo
-    echo "Run 'docker network rm'  command to remove docker network."
+    if [ "$IH_SUBNET" != "$SUBNET" ]; then
+      echo "*ERROR* \"${IH_NET}\" subnet value different from \"${IH_SUBNET}\"."
+      ip route | grep ${NET_ID}
+      echo
+      echo "Run 'docker network rm'  command to remove docker network."
 
-    exit 1
+      exit 1
+    fi
   fi
 fi
 
@@ -131,25 +143,25 @@ while [ ${NO} -le ${IH_NODES} ]; do
   IH_IP=$(echo "$(echo ${IH_SUBNET} | cut -d'.' -f1-3).$n")
 
   if [ ${NO} -eq 4 ]; then
-    echo "# docker run -d --name ${IROHA} -p 1204:1204 --restart=always -v ${IH_HOME}/config/config${NO}:/usr/local/iroha/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
+    echo "# docker run -d --name ${IROHA} -p 1204:1204 --restart=always -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
 
     docker run -d --name ${IROHA} -p 1204:1204 \
       --restart=always \
-      -v ${IH_HOME}/config/config${NO}:/usr/local/iroha/config \
+      -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config \
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \
       ${VENDOR}/${IH_NAME} /bin/su - iroha \
-      -c "env IROHA_HOME=${IH_HOME} ${IH_HOME}/bin/iroha-main"
+      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/bin/iroha-main"
   else
-    echo "# docker run -d --name ${IROHA} --restart=always -v ${IH_HOME}/config/config${NO}:${IH_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
+    echo "# docker run -d --name ${IROHA} --restart=always -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
 
     docker run -d --name ${IROHA} \
       --restart=always \
-      -v ${IH_HOME}/config/config${NO}:${IH_HOME}/config \
+      -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config \
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \
       ${VENDOR}/${IH_NAME} /bin/su - iroha \
-      -c "env IROHA_HOME=${IH_HOME} ${IH_HOME}/bin/iroha-main"
+      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/bin/iroha-main"
   fi
 
   ((NO+=1))
