@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-if tty | grep -q pts 2>%1 >/dev/null; then
+if tty | grep -q pts 2>&1 >/dev/null; then
   # For Ubuntu
   TTY="/dev/pts/"
   n=0
