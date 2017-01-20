@@ -1,18 +1,19 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]; then
+  NO=0
+else
+  NO=$1
+fi
 
 if tty | grep -q pts 2>&1 >/dev/null; then
   # For Ubuntu
   TTY="/dev/pts/"
-  n=0
+  n=$((0 +$NO))
 else
   # For MacOS
   TTY="/dev/ttys00"
-  n=1
-fi
-
-if [ $# -gt 0 ]; then
-  n="$1"
+  n=$((1 + $NO))
 fi
 
 for i in 1 2 3 4; do
