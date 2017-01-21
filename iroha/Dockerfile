@@ -3,7 +3,7 @@
 #
 # build : docker build -t hyperledger/iroha .
 #
-# Copyright (c) 2016 Soramitsu,Co.,Ltd.
+# Copyright (c) 2016, 2017 Soramitsu,Co.,Ltd.
 # All Rights Reserved.
 #-----------------------------------------------------------------------
 FROM hyperledger/iroha-dev
@@ -64,7 +64,7 @@ RUN mkdir $IROHA_HOME && \
     rsync -av /opt/iroha/build/test_bin $IROHA_HOME && \
     rsync -av /opt/iroha/core/vendor/ed25519/lib $IROHA_HOME
 
-COPY ./test.sh ./mkiroha-tar.sh ${IROHA_HOME}/
+COPY ./tools/test.sh ./tools/mkiroha-tar.sh ./tools/iroha-out.sh ${IROHA_HOME}/
 
 RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /home/iroha/.bashrc && \
     sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /root/.bashrc
