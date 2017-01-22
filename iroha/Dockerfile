@@ -15,11 +15,14 @@ LABEL RUN="docker run -d --name iroha hyperledger/iroha"
 
 USER root
 
+ARG BRANCH=${BRANCH:-master}
+RUN echo "IROHA clone branch: ${BRANCH}"
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone --recursive https://github.com/hyperledger/iroha.git iroha; \
+RUN git clone -v ${BRANCH} --recursive https://github.com/hyperledger/iroha.git iroha; \
     apt -y install autoconf automake libtool pkg-config
 
 WORKDIR /tmp
