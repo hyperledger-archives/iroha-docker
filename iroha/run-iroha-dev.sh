@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------
-# run-iroha.sh : Run IROHA docker containers
+# run-iroha-dev.sh : Run IROHA docker containers for Development
 #
-# Usage: run-iroha.sh [<container_name>]
+# Usage: run-iroha-dev.sh [<container_name>]
 #
 # Copyright (c) 2016,2017 Soramitsu, Co.,Ltd.
 # All Rights Reserved.
@@ -39,6 +39,14 @@ IH_GID=168
 
 IH_NET="iroha_net"
 IH_SUBNET="10.0.168.0/24"
+
+#
+# Check IROHA local installation
+#
+if [ ! -x ${IH_HOME}/build/bin/iroha-main ]; then
+  echo "*ERROR* ${IH_HOME}/build/bin/iroha-main not found"
+  exit 1
+fi
 
 #
 # Check IROHA configuration files
@@ -143,22 +151,22 @@ while [ ${NO} -le ${IH_NODES} ]; do
   IH_IP=$(echo "$(echo ${IH_SUBNET} | cut -d'.' -f1-3).$n")
 
   if [ ${NO} -eq 4 ]; then
-    echo "# docker run -d --name ${IROHA} -p 1204:1204 --restart=always -v /opt/iroha:/opt/iroha -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
+    echo "# docker run -d --name ${IROHA} -p 1204:1204 --restart=always -v ${IH_HOME}:/opt/iroha -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
 
     docker run -d --name ${IROHA} -p 1204:1204 \
       --restart=always \
-      -v /opt/iroha:/opt/iroha \
+      -v ${IH_HOME}:/opt/iroha \
       -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config \
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \
       ${VENDOR}/${IH_NAME} /bin/su - iroha \
       -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/build/bin/iroha-main"
   else
-    echo "# docker run -d --name ${IROHA} --restart=always -v /opt/iroha:/opt/iroha -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
+    echo "# docker run -d --name ${IROHA} --restart=always -v ${IH_HOME}:/opt/iroha -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
 
     docker run -d --name ${IROHA} \
       --restart=always \
-      -v /opt/iroha:/opt/iroha \
+      -v ${IH_HOME}:/opt/iroha \
       -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config \
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \

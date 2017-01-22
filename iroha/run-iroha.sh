@@ -26,7 +26,7 @@ fi
 
 IH_NODES=4
 
-IROHA_HOME="/usr/local/iroha"
+IROHA_HOME="/opt/iroha"
 
 if [ "$(uname -s)" == "Linux" ]; then
   IH_HOME="${IROHA_HOME}"
@@ -151,7 +151,7 @@ while [ ${NO} -le ${IH_NODES} ]; do
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \
       ${VENDOR}/${IH_NAME} /bin/su - iroha \
-      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/bin/iroha-main"
+      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/build/bin/iroha-main"
   else
     echo "# docker run -d --name ${IROHA} --restart=always -v ${IH_HOME}/config/config${NO}:${IROHA_HOME}/config -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger --network=${IH_NET} --ip=${IH_IP} ${VENDOR}/${IH_NAME}"
 
@@ -161,7 +161,7 @@ while [ ${NO} -le ${IH_NODES} ]; do
       -v ${IH_HOME}/ledger/iroha_ledger${NO}:/tmp/iroha_ledger \
       --network=${IH_NET} --ip=${IH_IP} \
       ${VENDOR}/${IH_NAME} /bin/su - iroha \
-      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/bin/iroha-main"
+      -c "env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/build/bin/iroha-main"
   fi
 
   ((NO+=1))

@@ -4,7 +4,7 @@ VENDOR="hyperledger"
 
 IH_NAME="iroha"
 
-IH_HOME="/usr/local/iroha"
+IH_HOME="$HOME/iroha"
 
 NO="3"
 IROHA="iroha${NO}"

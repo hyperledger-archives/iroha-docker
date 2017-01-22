@@ -4,18 +4,31 @@ docker stop iroha-dev
 
 docker rm iroha-dev
 
-if [ ! -d /opt/iroha ]; then
-  mkdir /opt/iroha
+IROHA_HOME="/opt/iroha"
+
+if [ "$(uname -s)" == "Linux" ]; then
+  IH_HOME="${IROHA_HOME}"
+else
+  IH_HOME="${HOME}/iroha"
 fi
 
-docker run -d --name iroha-dev -v /opt/iroha:/var/tmp/iroha hyperledger/iroha /usr/local/iroha/iroha-out.sh
+IH_UID=168
+IH_GID=168
 
-rsync -av ../config /opt/iroha
+if [ ! -d ${IH_HOME} ]; then
+  mkdir ${IH_HOME}
+fi
 
-cd /opt/iroha
+docker run -it --rm --name iroha-dev -v ${IH_HOME}:/var/tmp/iroha hyperledger/iroha ${IROHA_HOME}/iroha-out.sh
 
-chown -R 168:168 config
-chmod g-s config/config?
-chmod 0755 config/config?
+rsync -av ../config ${IH_HOME}
+
+if [ "$(uname -s)" == "Linux" ]; then
+ cd ${IROHA_HOME}
+
+ chown -R ${IH_UID}:${IH_GID} config
+ chmod g-s config/config?
+ chmod 0755 config/config?
+fi
 
 exit 0
