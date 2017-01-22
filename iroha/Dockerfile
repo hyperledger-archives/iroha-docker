@@ -10,19 +10,20 @@ FROM hyperledger/iroha-dev
 
 MAINTAINER Takeshi Yonezu <yonezu@soramitsu.co.jp>
 
-LABEL BUILD="docker build -t hyperledger/iroha ."
-LABEL RUN="docker run -d --name iroha hyperledger/iroha"
-
 USER root
 
 ARG BRANCH=${BRANCH:-master}
 RUN echo "IROHA clone branch: ${BRANCH}"
 
+LABEL GIT="git clone -b ${BRANCH} --recursive https://github.com/hyperledger/iroha.git iroha"
+LABEL BUILD="docker build --build-arg BRANCH=${BRANCH} -t hyperledger/iroha ."
+LABEL RUN="docker run -d --name iroha hyperledger/iroha"
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV IROHA_HOME /opt/iroha
 
 WORKDIR /opt
-RUN git clone -v ${BRANCH} --recursive https://github.com/hyperledger/iroha.git iroha; \
+RUN git clone -b ${BRANCH} --recursive https://github.com/hyperledger/iroha.git iroha; \
     apt -y install autoconf automake libtool pkg-config
 
 WORKDIR /tmp
