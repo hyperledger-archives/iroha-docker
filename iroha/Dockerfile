@@ -54,22 +54,9 @@ WORKDIR $IROHA_HOME/build
 RUN cmake ..
 RUN make
 
-ENV IROHA_HOME /usr/local/iroha
-
-RUN mkdir $IROHA_HOME && \
-    rsync -av /opt/iroha/build/bin $IROHA_HOME && \
-##  rsync -av /opt/iroha/config $IROHA_HOME && \
-    rsync -av /opt/iroha/build/lib $IROHA_HOME && \
-    rsync -av /opt/iroha/build/my_test_bin $IROHA_HOME && \
-    rsync -av /opt/iroha/build/test_bin $IROHA_HOME && \
-    rsync -av /opt/iroha/core/vendor/ed25519/lib $IROHA_HOME
-
 COPY ./tools/test.sh ./tools/mkiroha-tar.sh ./tools/iroha-out.sh ${IROHA_HOME}/
-
-RUN sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /home/iroha/.bashrc && \
-    sed -i 's/\/opt\/iroha/\/usr\/local\/iroha/' /root/.bashrc
 
 ## USER iroha
 WORKDIR $IROHA_HOME
 
-CMD ["/bin/su","-","iroha","-c","env IROHA_HOME=/usr/local/iroha /usr/local/iroha/bin/iroha-main"]
+CMD ["/bin/su","-","iroha","-c","env IROHA_HOME=${IROHA_HOME} ${IROHA_HOME}/build/bin/iroha-main"]
