@@ -4,7 +4,13 @@ VENDOR="hyperledger"
 
 IH_NAME="iroha"
 
-IH_HOME="$HOME/iroha"
+IROHA_HOME="/opt/iroha"
+
+if [ "$(uname -s)" == "Linux" ]; then
+  IH_HOME="${IROHA_HOME}"
+else
+  IH_HOME="${HOME}/iroha"
+fi
 
 NO="3"
 IROHA="iroha${NO}"
